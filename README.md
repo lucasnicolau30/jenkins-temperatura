@@ -17,14 +17,16 @@ quatro testes Pytest em `tests/` e um `Jenkinsfile` com o pipeline.
 2. Novo item > Pipeline > Pipeline script from SCM > Git > URL do repositório > branch `main` > Script Path `Jenkinsfile`.
 3. A máquina do Jenkins precisa de `python3` e `python3-venv`.
 
-## Cenários (o que alterar em src/temperatura.py antes de cada build)
+## Cenários
 
-| # | Cenário | Alteração | Resultado esperado |
-|---|---------|----------|--------------------|
-| 1 | Sucesso | nenhuma | build SUCCESS, 4 testes passam |
-| 2 | Falha de compilação | remover o `32` da linha `return c * 9 / 5 + 32` | estágio Build falha, FAILURE |
-| 3 | Teste falha | trocar `(f - 32)` por `(f - 30)` | build UNSTABLE, testes vermelhos |
-| 4 | Agendado | trigger `* * * * *` (demo), sem clicar em Build | build automático com SUCCESS |
-| 5 | Cobertura | nenhuma | estágio Cobertura mostra 100% no log |
+Cada cenário usa um job no Jenkins apontando para uma branch deste repositório.
 
-Depois de cada cenário, desfaça a alteração.
+| # | Cenário | Branch | Resultado esperado |
+|---|---------|--------|--------------------|
+| 1 | Sucesso | `main` | build SUCCESS, 4 testes passam |
+| 2 | Falha de compilação | `cenario2-falha-compilacao` (erro de sintaxe em `celsius_para_fahrenheit`) | estágio Build falha, FAILURE |
+| 3 | Teste falha | `cenario3-teste-falha` (`(f - 32)` trocado por `(f - 30)`) | build UNSTABLE, 2 testes falham |
+| 4 | Agendado | `cenario4-agendado` (`cron('* * * * *')` no Jenkinsfile) | build automático com SUCCESS, sem clicar |
+| 5 | Cobertura (bônus) | `main` | estágio Cobertura mostra 100% no log |
+
+A `main` contém sempre o código correto. Os defeitos dos cenários 2 e 3 ficam apenas nas branches.
