@@ -1,9 +1,9 @@
 pipeline {
     agent any
 
-    // Cenário 4: build agendado (roda todo dia entre 02h e 03h; para a demo use '* * * * *')
+    // Cenário 4: build agendado a cada minuto (apenas para a demonstração)
     triggers {
-        cron('H 2 * * *')
+        cron('* * * * *')
     }
 
     stages {
